@@ -1,5 +1,5 @@
 logo = """
-            88          88                       88        88                       88
+        88          88                       88        88                       88
         88          88                       88        ""                       88
         88          88                       88                                 88
         88,dPPYba,  88 ,adPPYYba,  ,adPPYba, 88   ,d8  88 ,adPPYYba,  ,adPPYba, 88   ,d8
