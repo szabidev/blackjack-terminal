@@ -1,14 +1,14 @@
 import re
 from unicards import unicard
 import random
-from shared import human, cpu, deck
+from shared import deck, player_score, cpu_score
 
 
 def separate_card(card):
-    """Function to search string and find uppercase letters and numbers"""
-    match = re.match(r"([A-Z0-9])", card)
+    """Function to search string and find uppercase letters, numbers, and optionally a suit character"""
+    match = re.match(r"(\d{1,2}|[A-Z0-9])[shdc]?", card)
     if match:
-        return match.group()
+        return match.group(1)
     else:
         return None
 
@@ -27,10 +27,13 @@ def is_blackjack(cards):
     """"Checks if player has blackjack, checking and assigning the value of card from {cards} list argument """
     blackjack_score = 0
     for card in cards:
-        if separate_card(card) == "A":
+        is_ace = card == 'As' or card == 'Ad' or card == 'Ah' or card == 'Ac'
+        if is_ace:
             blackjack_score += 11
-        if separate_card(card) == "K" or separate_card(card) == "Q" or separate_card(card) == "J" or separate_card(card) == "10":
+        elif separate_card(card) == "K" or separate_card(card) == "Q" or separate_card(card) == "J" or separate_card(card) == "10":
             blackjack_score += 10
+        else:
+            blackjack_score += int(separate_card(card))
     print(blackjack_score, 'blackjack score')
 
     if blackjack_score == 21:
@@ -54,42 +57,68 @@ def draw_card(deck_of_cards, num_of_cards_to_draw):
     return playing_cards
 
 
+def check_winner(player, opponent, ply_score, opp_score):
+    if ply_score > opp_score:
+        print(f"Congratulations {player} your score is {ply_score}. You won!")
+    elif opp_score > ply_score:
+        print(f"{opponent} score is {opp_score}. You lost!")
+    else:
+        print(f"{player} score: {ply_score}")
+        print(f"{opponent} score: {opp_score}")
+        print(f"It's a draw")
+
+
 def calculate_score(cards, player):
     score = 0
+    # This function calculates and returns the score without modifying global variables
     for card in cards:
         card_value = separate_card(card)
-        if card_value == 'K' or card_value == 'J' or card_value == "Q":
+        if card_value in ['K', 'J', "Q"]:
             card_value = 10
         elif card_value == "A":
-            if player == cpu:
-                if score <= 10:
-                    card_value = 11
-                else:
-                    card_value = 1
-            if player == human:
+            if player == "cpu":
+                card_value = 11 if score <= 10 else 1
+            else:
+                print('======================================')
                 card_value = int(input("Choose the value of Ace, type '1' or '11':\n"))
-        else:
-            card_value = card_value
+                print('======================================')
         score += int(card_value)
-    # print(score, 'score')
-    return score
+    return score  # Return the calculated score
 
 
 def draw_one_card(deck_of_cards, num_of_draw, ply_cards, to_print):
-    new_card = "".join(random.sample(deck_of_cards, num_of_draw))
-    ply_cards.append(new_card)
-    to_print.append(display_cards(new_card))
-    deck.remove(new_card)
+    new_card = ''
+    for _ in range(num_of_draw):
+        new_card = ''.join(random.sample(deck_of_cards, 1))
+        ply_cards.append(new_card)
+        print(new_card, 'new card')
+        to_print.append(display_cards(new_card))
+        deck.remove(new_card)
+        print(ply_cards, 'player cards after first draw')
+    print(len(deck), 'deck after first draw')
     return new_card
 
 
 def print_cards(player, to_print):
     print(f"{player}'s cards are {' '.join(to_print)}")
+    print('======================================')
 
 
-def print_score(player_deck, player):
-    score = calculate_score(player_deck, player)
+def print_score(player, score):
     print(f"Current {player} score is {score}")
+    print('======================================')
+    return score
+
+
+# def print_stats(player, player_deck, cards_to_print, score):
+#     print_cards(player, cards_to_print)
+#     calculated_score = calculate_score(player_deck, player)  # Capture the returned score
+#     if player == 'cpu':
+#         cpu_score = calculated_score  # Update the cpu_score global variable if needed
+#     else:
+#         player_score = calculated_score  # Update the player_score global variable if needed
+#     print(f"Current {player} score is {calculated_score}")
+#     print('======================================')
 
 # Draw cards 2 and 2 for each player
 
