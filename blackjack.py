@@ -2,7 +2,6 @@ from logo import logo
 from actions import draw_one_card, print_cards, is_blackjack, calculate_score, print_score, check_winner
 from shared import deck, player_cards, player_cards_to_print, cpu_cards, cpu_cards_to_print
 
-
 # Blackjack logo
 print(logo)
 
@@ -14,9 +13,8 @@ cpu = 'cpu'
 
 
 def play_game():
-    player_score = 0
-    cpu_score = 0
     blackjack = False
+
     # First round. Draw cards
     draw_one_card(deck, 2, player_cards, player_cards_to_print)
     draw_one_card(deck, 2, cpu_cards, cpu_cards_to_print)
@@ -25,9 +23,7 @@ def play_game():
     print_cards(human, player_cards_to_print)
     print_cards(cpu, cpu_cards_to_print)
 
-    # Check if any of the payers have blackjack
-    print(is_blackjack(player_cards))
-    print(is_blackjack(cpu_cards))
+    # Check if any of the players have blackjack
     if is_blackjack(player_cards):
         print(f"Blackjack!!! Congratulations {human} you won!")
         print('======================================')
@@ -48,44 +44,45 @@ def play_game():
         cpu_score = calculate_score(cpu_cards, cpu)
         print_score(cpu, cpu_score)
 
-    print(player_score, 'playerscore')
-    print(cpu_score, 'cpu score')
-
-    while player_score < 18:
-        answer = input(f"Your score is {player_score}, do you want another card? Type 'yes' or 'no'\n")
-        # Draw ome card for player and one for cpu, display both stats
-        if answer == 'yes':
-            print(player_cards, 'ply')
+        #  If player score is less than 17 tell the player he needs another card
+        if player_score < 17:
+            input(f"Your score is {player_score}, you must draw another card. Press 'Enter' to continue.\n")
             draw_one_card(deck, 1, player_cards, player_cards_to_print)
-            if cpu_score < 18:
-                draw_one_card(deck, 1, cpu_cards, cpu_cards_to_print)
             player_score = calculate_score(player_cards, human)
-            cpu_score = calculate_score(cpu_cards, cpu)
             print_cards(human, player_cards_to_print)
             print_score(human, player_score)
+        # If player score is 17 >= player_score <= 20 ask if he wants another card or stop playing
+        elif 17 >= player_score <= 20:
+            answer = input(f"Your score is {player_score}, do you want another card? Type 'yes' to draw or 'no' to stop.\n")
+            # Continue
+            if answer.lower() == 'yes':
+                draw_one_card(deck, 1, player_cards, player_cards_to_print)
+                player_score = calculate_score(player_cards, human)
+                print_cards(human, player_cards_to_print)
+                print_score(human, player_score)
+            # Stop
+            elif answer.lower() == 'no':
+                print_cards(human, player_cards_to_print)
+                print_score(human, player_score)
+        elif player_score == 21:
+            print(f"Congratulations {human} your score is {player_score}! You won!")
+        else:
+            print(f"{human} your score is {player_score}. You lost! Game Over!")
+
+        # Check cpu score, if less than 19 draw another card
+        if cpu_score < 19:
+            print(f"{cpu} score is {cpu_score}, draws another card")
+            draw_one_card(deck, 1, cpu_cards, cpu_cards_to_print)
+            cpu_score = calculate_score(cpu_cards, cpu)
             print_cards(cpu, cpu_cards_to_print)
             print_score(cpu, cpu_score)
-            check_winner(human, cpu, player_score, cpu_score)
-        # Draw one card for cpu, display both stats
-        elif answer == 'no':
-            print('no')
-            if cpu_score < 18:
-                draw_one_card(deck, 1, cpu_cards, cpu_cards_to_print)
-                print_cards(human, player_cards_to_print)
-                print_cards(cpu, cpu_cards_to_print)
-                cpu_score = calculate_score(cpu_cards, cpu)
-                print_score(human, player_score)
-                print_score(cpu, cpu_score)
-                check_winner(human, cpu, player_score, cpu_score)
-
-            else:
-                print_cards(human, player_cards_to_print)
-                print_score(human, player_score)
-                print_cards(cpu, cpu_cards_to_print)
-                print_score(cpu, cpu_score)
-                check_winner(human, cpu, player_score, cpu_score)
-        else:
-            return
+        elif 19 == cpu_score < 21:
+            cpu_score = calculate_score(cpu_cards, cpu)
+            print_cards(cpu, cpu_cards_to_print)
+            print_score(cpu, cpu_score)
+            print(f"{cpu} score is {cpu_score}")
+        elif cpu_score == 21:
+            print(f"{cpu} score is {cpu_score}. You lost! Play again?")
 
 
 play_game()

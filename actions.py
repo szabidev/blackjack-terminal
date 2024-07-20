@@ -34,7 +34,7 @@ def is_blackjack(cards):
             blackjack_score += 10
         else:
             blackjack_score += int(separate_card(card))
-    print(blackjack_score, 'blackjack score')
+    # print(blackjack_score, 'blackjack score')
 
     if blackjack_score == 21:
         return True
@@ -79,7 +79,6 @@ def calculate_score(cards, player):
             if player == "cpu":
                 card_value = 11 if score <= 10 else 1
             else:
-                print('======================================')
                 card_value = int(input("Choose the value of Ace, type '1' or '11':\n"))
                 print('======================================')
         score += int(card_value)
@@ -91,11 +90,8 @@ def draw_one_card(deck_of_cards, num_of_draw, ply_cards, to_print):
     for _ in range(num_of_draw):
         new_card = ''.join(random.sample(deck_of_cards, 1))
         ply_cards.append(new_card)
-        print(new_card, 'new card')
         to_print.append(display_cards(new_card))
         deck.remove(new_card)
-        print(ply_cards, 'player cards after first draw')
-    print(len(deck), 'deck after first draw')
     return new_card
 
 
