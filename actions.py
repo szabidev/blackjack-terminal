@@ -1,7 +1,7 @@
 import re
 from unicards import unicard
 import random
-from shared import deck, player_score, cpu_score
+from shared import deck
 
 
 def separate_card(card):
@@ -34,7 +34,6 @@ def is_blackjack(cards):
             blackjack_score += 10
         else:
             blackjack_score += int(separate_card(card))
-    # print(blackjack_score, 'blackjack score')
 
     if blackjack_score == 21:
         return True
@@ -58,6 +57,7 @@ def draw_card(deck_of_cards, num_of_cards_to_draw):
 
 
 def check_winner(player, opponent, ply_score, opp_score):
+    """Compare the scores of two players and determine the winner, or if it's a draw"""
     if ply_score > opp_score:
         print(f"Congratulations {player} your score is {ply_score}. You won!")
     elif opp_score > ply_score:
@@ -69,8 +69,8 @@ def check_winner(player, opponent, ply_score, opp_score):
 
 
 def calculate_score(cards, player):
+    """This function calculates and returns the score without modifying global variables, takes a deck of cards and user as arguments."""
     score = 0
-    # This function calculates and returns the score without modifying global variables
     for card in cards:
         card_value = separate_card(card)
         if card_value in ['K', 'J', "Q"]:
@@ -82,7 +82,7 @@ def calculate_score(cards, player):
                 card_value = int(input("Choose the value of Ace, type '1' or '11':\n"))
                 print('======================================')
         score += int(card_value)
-    return score  # Return the calculated score
+    return score
 
 
 def draw_one_card(deck_of_cards, num_of_draw, ply_cards, to_print):
@@ -106,32 +106,3 @@ def print_score(player, score):
     return score
 
 
-# def print_stats(player, player_deck, cards_to_print, score):
-#     print_cards(player, cards_to_print)
-#     calculated_score = calculate_score(player_deck, player)  # Capture the returned score
-#     if player == 'cpu':
-#         cpu_score = calculated_score  # Update the cpu_score global variable if needed
-#     else:
-#         player_score = calculated_score  # Update the player_score global variable if needed
-#     print(f"Current {player} score is {calculated_score}")
-#     print('======================================')
-
-# Draw cards 2 and 2 for each player
-
-# Check if any of the cards are A, K, Q , J, and who is the player
-    # if player  == human ask if A = 11 or 1
-    # if cpu and score less than or = to 15 A = 1 else A = 11
-
-# Check player scores
-
-#  Check if any of the players have blackjack
-    # If yes declare winner
-    # If no continue the game
-
-# Add up scores (player, cpu)
-
-# Check score if less than or equal to 15
-    # If yes draw one card, remove from deck
-    # If no but less then 19 ask if player wants another card
-
-# Add up scores again, add card to player card list

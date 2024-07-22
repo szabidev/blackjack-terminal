@@ -4,10 +4,8 @@ suits = ['s', 'h', 'd', 'c']  # s=spades, h=hearts, d=diamonds, c=clubs
 # Create the deck
 deck = [rank + suit for rank in ranks for suit in suits]
 
-# Initial cards and score
-player_score = 0
+# Initial cards
 player_cards = []
 player_cards_to_print = []
-cpu_score = 0
 cpu_cards = []
 cpu_cards_to_print = []
