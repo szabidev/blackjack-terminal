@@ -71,6 +71,7 @@ def calculate_score(cards, player):
 
 
 def draw_one_card(deck_of_cards, num_of_draw, ply_cards, to_print):
+    """Draws one card, and transforms it to displayable card"""
     new_card = ''
     for _ in range(num_of_draw):
         new_card = ''.join(random.sample(deck_of_cards, 1))
@@ -81,11 +82,13 @@ def draw_one_card(deck_of_cards, num_of_draw, ply_cards, to_print):
 
 
 def print_cards(player, to_print):
+    """Print cards, 2 arguments player cards to print, cards to print"""
     print(f"{player}'s cards are {' '.join(to_print)}")
     print('======================================')
 
 
 def print_score(player, score):
+    """Print score, 2 args player and player score"""
     print(f"Current {player} score is {score}")
     print('======================================')
     return score

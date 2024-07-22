@@ -102,6 +102,7 @@ def main():
         if play_response == 'yes':
             play_game()
         else:
+            # If the user responds anything else quit playing the game
             print("Thank you for playing! Goodbye.")
             break  # Exit the loop and end the program
 
