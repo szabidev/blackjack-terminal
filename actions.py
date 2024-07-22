@@ -41,21 +41,6 @@ def is_blackjack(cards):
         return False
 
 
-def draw_card(deck_of_cards, num_of_cards_to_draw):
-    """"Draw one card from the deck and remove it from that deck"""
-    playing_cards = random.sample(deck_of_cards, num_of_cards_to_draw)
-    print(playing_cards, 'playing cards')
-    if len(playing_cards) < 1:
-        deck.remove(playing_cards[0])
-
-    if len(playing_cards) >= 1:
-        for playing_card in deck_of_cards:
-            if playing_card == playing_cards[0] or playing_card == playing_cards[1] or playing_card == playing_cards[2] or playing_card == playing_cards[3]:
-                deck.remove(playing_card)
-
-    return playing_cards
-
-
 def check_winner(player, opponent, ply_score, opp_score):
     """Compare the scores of two players and determine the winner, or if it's a draw"""
     if ply_score > opp_score:
